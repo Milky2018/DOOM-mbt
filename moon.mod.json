@@ -2,8 +2,8 @@
   "name": "Milky2018/doom",
   "version": "0.1.0",
   "deps": {
-    "Milky2018/selene": "0.12.0",
-    "Milky2018/selene-canvas": "0.12.0"
+    "Milky2018/selene": "0.13.4",
+    "Milky2018/selene-canvas": "0.13.4"
   },
   "readme": "README.md",
   "repository": "",

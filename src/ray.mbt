@@ -79,13 +79,27 @@ fn cast_ray(angle : Double) -> Ray {
 
   // Convert back to pixel distance
   let distance = perp_wall_dist * TILE_SIZE
-  { distance, side }
+
+  // Calculate wall hit coordinate for texture mapping
+  let wall_hit_x = start_x + perp_wall_dist * ray_dir_x
+  let wall_hit_y = start_y + perp_wall_dist * ray_dir_y
+
+  // Use the appropriate coordinate based on wall side for texture mapping
+  let wall_x = match side {
+    Vertical => wall_hit_y / TILE_SIZE // Use Y coordinate for vertical walls
+    Horizontal => wall_hit_x / TILE_SIZE // Use X coordinate for horizontal walls
+  }
+  // Get fractional part for texture coordinate
+  let wall_x = wall_x - wall_x.floor()
+
+  { distance, side, wall_x }
 }
 
 ///|
 struct Ray {
   distance : Double
   side : Side
+  wall_x : Double // X coordinate where ray hit the wall (for texture mapping)
 }
 
 ///|
@@ -108,6 +122,7 @@ fn cast_all_rays() -> Array[Ray] {
     rays.push({
       distance: ray_info.distance * @math.cos(angle_diff),
       side: ray_info.side,
+      wall_x: ray_info.wall_x,
     })
   }
   rays
