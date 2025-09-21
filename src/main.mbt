@@ -1,5 +1,6 @@
 ///|
 fn main {
+  init_dots() // Initialize dots in the maze
   @system.App::new(@canvas.CanvasBackend::new())
   .with_canvas_height(CANVAS_HEIGHT)
   .with_canvas_width(CANVAS_WIDTH)

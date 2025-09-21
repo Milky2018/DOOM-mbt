@@ -70,6 +70,34 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
       )
     }
   }
+
+  // Render dots that were hit by rays
+  for i, ray in rays {
+    match ray.hit_dot {
+      Some(_dot_index) => {
+        let strip_x = i.to_double() * strip_width
+        // Make dots scale with distance like walls
+        let dot_screen_height = 16.0 * distance_scale / ray.distance // Smaller base size for dots
+
+        // Position dots on the ground (bottom of screen)
+        let dot_y = CANVAS_HEIGHT / 2 - dot_screen_height / 2 // Place at bottom
+
+        // Draw bright yellow dot that stands out
+        backend.draw_color_rect(
+          x=strip_x,
+          y=dot_y,
+          width=strip_width + 1,
+          height=dot_screen_height,
+          color="#FFFF00", // Bright yellow dot
+        )
+      }
+      None => ()
+    }
+  }
+
+  // Remove the old sprite rendering
+  // let sprites = calculate_sprites()
+  // render_sprites(backend, sprites)
 }
 
 ///|
@@ -77,6 +105,8 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
   let scale = 4.0
   let offset_x = 10.0
   let offset_y = 10.0
+
+  // Draw map tiles
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {
       let cell_x = offset_x + x.to_double() * scale
@@ -98,6 +128,21 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
           color="#333333",
         )
       }
+    }
+  }
+
+  // Draw dots on the map
+  for dot in dots {
+    if !dot.collected {
+      let dot_map_x = offset_x + (dot.x / TILE_SIZE) * scale
+      let dot_map_y = offset_y + (dot.y / TILE_SIZE) * scale
+      backend.draw_color_rect(
+        x=dot_map_x - 1.0,
+        y=dot_map_y - 1.0,
+        width=2.0,
+        height=2.0,
+        color="#FFFF00", // Yellow dots
+      )
     }
   }
 }

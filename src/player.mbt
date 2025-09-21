@@ -46,6 +46,10 @@ fn player_input_system(_backend : &@system.Backend) -> Unit {
   if can_move_to(player_state.x, new_y) {
     player_state.y = new_y
   }
+
+  // Check for dot collection after movement
+  check_dot_collection()
+
   if @system.is_mouse_locked() {
     let sensitivity = 0.002
     let angle = player_state.angle + @system.mouse_movement.movement[X] * sensitivity
