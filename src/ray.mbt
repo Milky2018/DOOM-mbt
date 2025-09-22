@@ -2,6 +2,9 @@
 const MAX_DEPTH = 800.0
 
 ///|
+const DOT_RADIUS = 4.0
+
+///|
 enum Side {
   Vertical
   Horizontal
@@ -91,12 +94,10 @@ fn cast_ray(angle : Double) -> Ray {
   }
   // Get fractional part for texture coordinate
   let wall_x = wall_x - wall_x.floor()
-
-  // Check for dots along the ray path - simplified approach
-  let mut hit_dot = None
+  let hit_dots = []
 
   // Check each dot to see if ray passes close to it
-  for i, dot in dots {
+  for _i, dot in dots {
     if !dot.collected {
       // Calculate dot distance from player
       let dot_dx = dot.x - start_x
@@ -106,17 +107,16 @@ fn cast_ray(angle : Double) -> Ray {
       // Check if dot is roughly in the same direction as the ray
       let dot_angle = @math.atan2(dot_dy, dot_dx)
       let ray_angle = @math.atan2(ray_dir_y, ray_dir_x)
+      let view_angle = @math.atan2(DOT_RADIUS, dot_distance)
       let angle_diff = (dot_angle - ray_angle).abs()
 
       // If dot is close to ray direction and closer than wall
-      if angle_diff < 0.1 && dot_distance < distance * 0.8 {
-        hit_dot = Some(i)
-        break
+      if angle_diff < view_angle && dot_distance < distance {
+        hit_dots.push((dot_distance, angle_diff))
       }
     }
   }
-
-  { distance, side, wall_x, hit_dot }
+  { distance, side, wall_x, hit_dots }
 }
 
 ///|
@@ -124,7 +124,7 @@ struct Ray {
   distance : Double
   side : Side
   wall_x : Double // X coordinate where ray hit the wall (for texture mapping)
-  hit_dot : Int? // Index of dot hit by this ray, if any
+  hit_dots : Array[(Double, Double)] // Distance to a dot 
 }
 
 ///|
@@ -148,7 +148,7 @@ fn cast_all_rays() -> Array[Ray] {
       distance: ray_info.distance * @math.cos(angle_diff),
       side: ray_info.side,
       wall_x: ray_info.wall_x,
-      hit_dot: ray_info.hit_dot,
+      hit_dots: ray_info.hit_dots,
     })
   }
   rays

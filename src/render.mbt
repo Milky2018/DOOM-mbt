@@ -38,14 +38,15 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
     // Calculate world Y position for texture mapping
     let wall_world_height = 64.0 // Standard wall height in world units
     let texture_y_scale = texture.height.to_double() / wall_world_height
-
     for segment in 0..<num_segments {
       let segment_y = wall_top + segment.to_double() * segment_height
 
       // Calculate texture Y based on world position, not screen position
-      let world_y_offset = (segment.to_double() * wall_world_height / num_segments.to_double())
-      let texture_y = (world_y_offset * texture_y_scale).to_int() % texture.height
-
+      let world_y_offset = segment.to_double() *
+        wall_world_height /
+        num_segments.to_double()
+      let texture_y = (world_y_offset * texture_y_scale).to_int() %
+        texture.height
       let texture_color = get_texture_pixel(texture, texture_x, texture_y)
 
       // Apply distance-based shading
@@ -56,11 +57,13 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
       let final_shading = shading_factor * side_factor
 
       // Parse and apply shading to texture color
-      let r = (try! (@strconv.parse_int(texture_color[1:3].to_string(), base=16).to_double() * final_shading)).to_int()
-      let g = (try! (@strconv.parse_int(texture_color[3:5].to_string(), base=16).to_double() * final_shading)).to_int()
-      let b = (try! (@strconv.parse_int(texture_color[5:7].to_string(), base=16).to_double() * final_shading)).to_int()
+      let r = (try! (@strconv.parse_int(texture_color[1:3].to_string(), base=16).to_double() *
+      final_shading)).to_int()
+      let g = (try! (@strconv.parse_int(texture_color[3:5].to_string(), base=16).to_double() *
+      final_shading)).to_int()
+      let b = (try! (@strconv.parse_int(texture_color[5:7].to_string(), base=16).to_double() *
+      final_shading)).to_int()
       let shaded_color = "rgb(\{r}, \{g}, \{b})"
-
       backend.draw_color_rect(
         x=strip_x,
         y=segment_y,
@@ -73,31 +76,23 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
 
   // Render dots that were hit by rays
   for i, ray in rays {
-    match ray.hit_dot {
-      Some(_dot_index) => {
-        let strip_x = i.to_double() * strip_width
-        // Make dots scale with distance like walls
-        let dot_screen_height = 16.0 * distance_scale / ray.distance // Smaller base size for dots
-
-        // Position dots on the ground (bottom of screen)
-        let dot_y = CANVAS_HEIGHT / 2 - dot_screen_height / 2 // Place at bottom
-
-        // Draw bright yellow dot that stands out
-        backend.draw_color_rect(
-          x=strip_x,
-          y=dot_y,
-          width=strip_width + 1,
-          height=dot_screen_height,
-          color="#FFFF00", // Bright yellow dot
-        )
-      }
-      None => ()
+    for dot in ray.hit_dots {
+      let (distance, angle_diff) = dot
+      let strip_x = i.to_double() * strip_width
+      let center_x = strip_x + (strip_width + 1) / 2.0
+      let x = distance * @math.tan(angle_diff)
+      let h = (DOT_RADIUS * DOT_RADIUS - x * x).sqrt()
+      let dot_height = h * 1.3 * distance_scale / distance
+      let dot_top = (CANVAS_HEIGHT - dot_height) / 2
+      backend.draw_color_rect(
+        x=center_x,
+        y=dot_top,
+        width=strip_width + 1,
+        height=dot_height,
+        color="#FFFF00",
+      )
     }
   }
-
-  // Remove the old sprite rendering
-  // let sprites = calculate_sprites()
-  // render_sprites(backend, sprites)
 }
 
 ///|
@@ -134,8 +129,8 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
   // Draw dots on the map
   for dot in dots {
     if !dot.collected {
-      let dot_map_x = offset_x + (dot.x / TILE_SIZE) * scale
-      let dot_map_y = offset_y + (dot.y / TILE_SIZE) * scale
+      let dot_map_x = offset_x + dot.x / TILE_SIZE * scale
+      let dot_map_y = offset_y + dot.y / TILE_SIZE * scale
       backend.draw_color_rect(
         x=dot_map_x - 1.0,
         y=dot_map_y - 1.0,
