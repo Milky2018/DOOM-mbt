@@ -75,9 +75,7 @@ fn check_dot_collection() -> Unit {
       // Check if all dots collected and advance level
       if all_dots_collected() {
         next_level()
-        init_dots()
-        init_ghosts()
-        init_player()
+        reset_level()
       }
     }
     None => ()

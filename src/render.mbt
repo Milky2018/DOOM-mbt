@@ -142,24 +142,6 @@ fn render_map_system(_delta : Double) -> Unit {
           height=scale,
           color="#8B4513",
         )
-      } else if map[y][x] == 2 {
-        // Ghost spawn point - show as slightly different color
-        @backend.draw_color_rect(
-          x=cell_x,
-          y=cell_y,
-          width=scale,
-          height=scale,
-          color="#444444", // Darker gray for spawn points
-        )
-      } else if map[y][x] == 3 {
-        // Player spawn point - show as green
-        @backend.draw_color_rect(
-          x=cell_x,
-          y=cell_y,
-          width=scale,
-          height=scale,
-          color="#00FF00", // Green for player spawn
-        )
       } else {
         // Empty space
         @backend.draw_color_rect(

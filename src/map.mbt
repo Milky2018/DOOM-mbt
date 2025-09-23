@@ -85,3 +85,10 @@ fn next_level() -> Unit {
     current_level.val = 0 // Back to level 1 after completing all levels
   }
 }
+
+///|
+fn reset_level() -> Unit {
+  init_dots()
+  init_ghosts()
+  init_player()
+}

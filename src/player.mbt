@@ -72,11 +72,11 @@ fn player_input_system(_delta : Double) -> Unit {
   // Check for dot collection after movement
   check_dot_collection()
 
-  // Check for ghost collision - game over if collision detected
+  // Check for ghost collision - reset entire level if collision detected
   if check_ghost_collision() {
     @audio.play_audio("assets/game_over.wav")
-    // Reset player to spawn point
-    init_player()
+    // Reset the entire level (dots, ghosts, and player)
+    reset_level()
   }
 
   if @system.is_mouse_locked() {
