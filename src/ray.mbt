@@ -127,7 +127,7 @@ fn cast_ray(angle : Double) -> Ray {
 
     // Check if ghost is roughly in the same direction as the ray
     let ghost_angle = @math.atan2(ghost_dy, ghost_dx)
-    let view_angle = @math.atan2(GHOST_SIZE / 2.0, ghost_distance)
+    let view_angle = @math.atan2(GHOST_RADIUS, ghost_distance)
     let angle_diff = (ghost_angle - angle).abs()
     let angle_diff = @cmp.minimum(angle_diff, @math.PI * 2.0 - angle_diff)
 

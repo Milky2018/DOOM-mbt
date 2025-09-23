@@ -14,7 +14,6 @@ struct Ghost {
   mut x : Double
   mut y : Double
   mut direction : Direction
-  mut move_timer : Double
   color : String
 }
 
@@ -26,10 +25,7 @@ let ghosts : Array[Ghost] = []
 const GHOST_SPEED = 1.5
 
 ///|
-const GHOST_SIZE = 20.0
-
-///|
-const DIRECTION_CHANGE_TIME = 60.0 // Change direction every 60 frames
+const GHOST_RADIUS = 20.0
 
 ///|
 // Initialize ghosts in the maze based on map data
@@ -47,7 +43,6 @@ fn init_ghosts() -> Unit {
           x: spawn_x,
           y: spawn_y,
           direction: get_random_direction(),
-          move_timer: 0.0,
           color: "#FF0000",
         })
       }
@@ -72,7 +67,7 @@ fn get_random_direction() -> Direction {
 ///|
 // Check if ghost can move to position
 fn ghost_can_move_to(x : Double, y : Double) -> Bool {
-  let radius = GHOST_SIZE / 2.0
+  let radius = GHOST_RADIUS
 
   // Check four corners around the ghost
   if is_wall(x - radius, y - radius) {
@@ -94,14 +89,6 @@ fn ghost_can_move_to(x : Double, y : Double) -> Bool {
 // Update ghost AI and movement
 fn update_ghosts() -> Unit {
   for ghost in ghosts {
-    ghost.move_timer += 1.0
-
-    // Change direction randomly or when hitting wall
-    if ghost.move_timer > DIRECTION_CHANGE_TIME {
-      ghost.direction = get_random_direction()
-      ghost.move_timer = 0.0
-    }
-
     // Calculate movement based on direction
     let mut dx = 0.0
     let mut dy = 0.0
@@ -121,7 +108,6 @@ fn update_ghosts() -> Unit {
     } else {
       // Hit a wall, change direction immediately
       ghost.direction = get_random_direction()
-      ghost.move_timer = 0.0
     }
   }
 }
@@ -131,7 +117,7 @@ fn update_ghosts() -> Unit {
 fn check_ghost_collision() -> Bool {
   let player_x = player_state.x
   let player_y = player_state.y
-  let collision_distance = PLAYER_RADIUS + GHOST_SIZE / 2.0
+  let collision_distance = PLAYER_RADIUS + GHOST_RADIUS / 2.0
   for ghost in ghosts {
     let dx = ghost.x - player_x
     let dy = ghost.y - player_y

@@ -101,10 +101,10 @@ fn render_3d_system(_delta : Double) -> Unit {
       let (ghost_index, distance, angle_diff) = ghost_hit
       let strip_x = i.to_double() * strip_width
       let center_x = strip_x + (strip_width + 1) / 2.0
-
-      // Calculate ghost size on screen
-      let ghost_height = GHOST_SIZE * distance_scale / distance
-      let ghost_top = (CANVAS_HEIGHT - ghost_height) / 2.0
+      let x = distance * @math.tan(angle_diff)
+      let h = (GHOST_RADIUS * GHOST_RADIUS - x * x).sqrt()
+      let ghost_height = h * 1.3 * distance_scale / distance
+      let ghost_top = (CANVAS_HEIGHT - ghost_height) / 2
 
       // Get ghost color
       let ghost_color = ghosts[ghost_index].color

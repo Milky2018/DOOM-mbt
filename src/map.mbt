@@ -70,7 +70,7 @@ let level2 = [
 
 ///|
 // Level progression system
-let current_level : Ref[Int] = Ref::new(1)
+let current_level : Ref[Int] = Ref::new(0)
 
 ///|
 let levels : Array[Level] = [level1, level2]
