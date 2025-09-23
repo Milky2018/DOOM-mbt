@@ -35,6 +35,7 @@ const DIRECTION_CHANGE_TIME = 60.0 // Change direction every 60 frames
 // Initialize ghosts in the maze based on map data
 fn init_ghosts() -> Unit {
   ghosts.clear()
+  let map = get_map()
 
   // Find ghost spawn points (value 2) in the map
   for y in 0..<map.length() {

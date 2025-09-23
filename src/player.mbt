@@ -16,6 +16,7 @@ let player_state : PlayerState = {
 ///|
 // Initialize player at spawn point from map
 fn init_player() -> Unit {
+  let map = get_map()
   // Find player spawn point (value 3) in the map
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {

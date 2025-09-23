@@ -16,6 +16,7 @@ let dots : Array[Dot] = []
 // Initialize dots in the maze (place them in empty spaces)
 fn init_dots() -> Unit {
   dots.clear()
+  let map = get_map()
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {
       if map[y][x] == 0 { // Only place dots in empty spaces (not walls, ghost spawns, or player spawn)
@@ -54,11 +55,31 @@ fn collect_dot(index : Int) -> Unit {
 }
 
 ///|
+// Check if all dots have been collected
+fn all_dots_collected() -> Bool {
+  for dot in dots {
+    if !dot.collected {
+      return false
+    }
+  }
+  return true
+}
+
+///|
 // Check if player is near a dot and collect it
 fn check_dot_collection() -> Unit {
   let collection_radius = 20.0 // Distance to collect dot
   match get_dot_at(player_state.x, player_state.y, collection_radius) {
-    Some(index) => collect_dot(index)
+    Some(index) => {
+      collect_dot(index)
+      // Check if all dots collected and advance level
+      if all_dots_collected() {
+        next_level()
+        init_dots()
+        init_ghosts()
+        init_player()
+      }
+    }
     None => ()
   }
 }

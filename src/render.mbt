@@ -126,6 +126,7 @@ fn render_map_system(_delta : Double) -> Unit {
   let scale = 4.0
   let offset_x = 10.0
   let offset_y = 10.0
+  let map = get_map()
 
   // Draw map tiles
   for y in 0..<map.length() {
