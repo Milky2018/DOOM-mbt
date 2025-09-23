@@ -1,10 +1,13 @@
 ///|
 fn main {
+  init_player() // Initialize player at spawn point
   init_dots() // Initialize dots in the maze
+  init_ghosts() // Initialize ghosts in the maze
   @system.App::new()
   .with_canvas_height(CANVAS_HEIGHT)
   .with_canvas_width(CANVAS_WIDTH)
   .add_system(player_input_system)
+  .add_system(ghost_update_system) // Add ghost AI system
   .add_system(game_startup, schedule=Startup)
   .add_system(@inputs.advanced_mouse_system)
   .add_system(render_3d_system, schedule=Render(0))

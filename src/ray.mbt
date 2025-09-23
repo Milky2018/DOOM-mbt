@@ -116,7 +116,28 @@ fn cast_ray(angle : Double) -> Ray {
       }
     }
   }
-  { distance, side, wall_x, hit_dots }
+  let hit_ghosts = []
+
+  // Check each ghost to see if ray passes close to it
+  for i, ghost in ghosts {
+    // Calculate ghost distance from player
+    let ghost_dx = ghost.x - start_x
+    let ghost_dy = ghost.y - start_y
+    let ghost_distance = (ghost_dx * ghost_dx + ghost_dy * ghost_dy).sqrt()
+
+    // Check if ghost is roughly in the same direction as the ray
+    let ghost_angle = @math.atan2(ghost_dy, ghost_dx)
+    let view_angle = @math.atan2(GHOST_SIZE / 2.0, ghost_distance)
+    let angle_diff = (ghost_angle - angle).abs()
+    let angle_diff = @cmp.minimum(angle_diff, @math.PI * 2.0 - angle_diff)
+
+    // If ghost is close to ray direction and closer than wall
+    if angle_diff < view_angle && ghost_distance < distance {
+      hit_ghosts.push((i, ghost_distance, angle_diff))
+    }
+  }
+
+  { distance, side, wall_x, hit_dots, hit_ghosts }
 }
 
 ///|
@@ -124,7 +145,8 @@ struct Ray {
   distance : Double
   side : Side
   wall_x : Double // X coordinate where ray hit the wall (for texture mapping)
-  hit_dots : Array[(Double, Double)] // Distance to a dot 
+  hit_dots : Array[(Double, Double)] // Distance to a dot
+  hit_ghosts : Array[(Int, Double, Double)] // (ghost_index, distance, angle_diff)
 }
 
 ///|
@@ -149,6 +171,7 @@ fn cast_all_rays() -> Array[Ray] {
       side: ray_info.side,
       wall_x: ray_info.wall_x,
       hit_dots: ray_info.hit_dots,
+      hit_ghosts: ray_info.hit_ghosts,
     })
   }
   rays

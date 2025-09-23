@@ -18,7 +18,7 @@ fn init_dots() -> Unit {
   dots.clear()
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {
-      if map[y][x] == 0 { // Empty space
+      if map[y][x] == 0 { // Only place dots in empty spaces (not walls, ghost spawns, or player spawn)
         // Place dot in center of tile
         let dot_x = (x.to_double() + 0.5) * TILE_SIZE
         let dot_y = (y.to_double() + 0.5) * TILE_SIZE

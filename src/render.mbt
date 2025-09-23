@@ -94,6 +94,31 @@ fn render_3d_system(_delta : Double) -> Unit {
       )
     }
   }
+
+  // Render ghosts that were hit by rays
+  for i, ray in rays {
+    for ghost_hit in ray.hit_ghosts {
+      let (ghost_index, distance, angle_diff) = ghost_hit
+      let strip_x = i.to_double() * strip_width
+      let center_x = strip_x + (strip_width + 1) / 2.0
+
+      // Calculate ghost size on screen
+      let ghost_height = GHOST_SIZE * distance_scale / distance
+      let ghost_top = (CANVAS_HEIGHT - ghost_height) / 2.0
+
+      // Get ghost color
+      let ghost_color = ghosts[ghost_index].color
+
+      // Draw ghost as colored rectangle
+      @backend.draw_color_rect(
+        x=center_x - (strip_width + 1) / 2.0,
+        y=ghost_top,
+        width=strip_width + 1,
+        height=ghost_height,
+        color=ghost_color,
+      )
+    }
+  }
 }
 
 ///|
@@ -108,6 +133,7 @@ fn render_map_system(_delta : Double) -> Unit {
       let cell_x = offset_x + x.to_double() * scale
       let cell_y = offset_y + y.to_double() * scale
       if map[y][x] == 1 {
+        // Wall
         @backend.draw_color_rect(
           x=cell_x,
           y=cell_y,
@@ -115,7 +141,26 @@ fn render_map_system(_delta : Double) -> Unit {
           height=scale,
           color="#8B4513",
         )
+      } else if map[y][x] == 2 {
+        // Ghost spawn point - show as slightly different color
+        @backend.draw_color_rect(
+          x=cell_x,
+          y=cell_y,
+          width=scale,
+          height=scale,
+          color="#444444", // Darker gray for spawn points
+        )
+      } else if map[y][x] == 3 {
+        // Player spawn point - show as green
+        @backend.draw_color_rect(
+          x=cell_x,
+          y=cell_y,
+          width=scale,
+          height=scale,
+          color="#00FF00", // Green for player spawn
+        )
       } else {
+        // Empty space
         @backend.draw_color_rect(
           x=cell_x,
           y=cell_y,
@@ -150,6 +195,19 @@ fn render_map_system(_delta : Double) -> Unit {
     y=player_map_y - 2.0,
     width=4.0,
     height=4.0,
-    color="#FF0000", // Red dot for player
+    color="#00FF00", // Red dot for player
   )
+
+  // Draw ghosts on minimap
+  for ghost in ghosts {
+    let ghost_map_x = offset_x + ghost.x / TILE_SIZE * scale
+    let ghost_map_y = offset_y + ghost.y / TILE_SIZE * scale
+    @backend.draw_color_rect(
+      x=ghost_map_x - 1.5,
+      y=ghost_map_y - 1.5,
+      width=3.0,
+      height=3.0,
+      color=ghost.color, // Use ghost's color
+    )
+  }
 }

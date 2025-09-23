@@ -6,10 +6,31 @@ struct PlayerState {
 }
 
 ///|
+// Initialize player at spawn point (will be set by init_player)
 let player_state : PlayerState = {
-  x: 1.5 * TILE_SIZE,
-  y: 1.5 * TILE_SIZE,
+  x: 0.0,
+  y: 0.0,
   angle: 0.0,
+}
+
+///|
+// Initialize player at spawn point from map
+fn init_player() -> Unit {
+  // Find player spawn point (value 3) in the map
+  for y in 0..<map.length() {
+    for x in 0..<map[y].length() {
+      if map[y][x] == 3 { // Player spawn point
+        player_state.x = (x.to_double() + 0.5) * TILE_SIZE
+        player_state.y = (y.to_double() + 0.5) * TILE_SIZE
+        player_state.angle = 0.0
+        return // Found spawn point, exit
+      }
+    }
+  }
+  // Fallback if no spawn point found
+  player_state.x = 1.5 * TILE_SIZE
+  player_state.y = 1.5 * TILE_SIZE
+  player_state.angle = 0.0
 }
 
 ///|
@@ -49,6 +70,13 @@ fn player_input_system(_delta : Double) -> Unit {
 
   // Check for dot collection after movement
   check_dot_collection()
+
+  // Check for ghost collision - game over if collision detected
+  if check_ghost_collision() {
+    @audio.play_audio("assets/game_over.wav")
+    // Reset player to spawn point
+    init_player()
+  }
 
   if @system.is_mouse_locked() {
     let sensitivity = 0.002
