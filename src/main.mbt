@@ -4,7 +4,6 @@ fn main {
   @system.App::new(@canvas.CanvasBackend::new())
   .with_canvas_height(CANVAS_HEIGHT)
   .with_canvas_width(CANVAS_WIDTH)
-  .add_plugin(@plugins.debug_plugin)
   .add_system(player_input_system)
   .add_system(@system.lock_mouse, schedule=Startup)
   .add_system(@system.advanced_mouse_system)
