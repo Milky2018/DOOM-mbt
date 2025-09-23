@@ -83,7 +83,8 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
       let x = distance * @math.tan(angle_diff)
       let h = (DOT_RADIUS * DOT_RADIUS - x * x).sqrt()
       let dot_height = h * 1.3 * distance_scale / distance
-      let dot_top = (CANVAS_HEIGHT - dot_height) / 2
+      let y_offset = 40.0 * distance_scale / distance
+      let dot_top = (CANVAS_HEIGHT - dot_height + y_offset) / 2
       backend.draw_color_rect(
         x=center_x,
         y=dot_top,
