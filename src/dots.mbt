@@ -49,6 +49,7 @@ fn get_dot_at(x : Double, y : Double, radius : Double) -> Int? {
 fn collect_dot(index : Int) -> Unit {
   if index < dots.length() {
     dots[index] = { ..dots[index], collected: true }
+    @audio.play_audio("assets/coin.wav")
   }
 }
 
