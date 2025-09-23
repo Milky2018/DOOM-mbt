@@ -106,9 +106,9 @@ fn cast_ray(angle : Double) -> Ray {
 
       // Check if dot is roughly in the same direction as the ray
       let dot_angle = @math.atan2(dot_dy, dot_dx)
-      let ray_angle = @math.atan2(ray_dir_y, ray_dir_x)
-      let view_angle = @math.atan2(DOT_RADIUS, dot_distance)
-      let angle_diff = (dot_angle - ray_angle).abs()
+      let view_angle = @math.atan2(DOT_RADIUS, dot_distance) 
+      let angle_diff = (dot_angle - angle).abs()
+      let angle_diff = @cmp.minimum(angle_diff, @math.PI * 2 - angle_diff)
 
       // If dot is close to ray direction and closer than wall
       if angle_diff < view_angle && dot_distance < distance {
@@ -137,7 +137,7 @@ fn cast_all_rays() -> Array[Ray] {
   let angle_step = FOV / num_rays.to_double()
   for i in 0..<num_rays {
     // Calculate ray angle
-    let ray_angle = player_state.angle - FOV / 2 + i.to_double() * angle_step
+    let ray_angle = @smath.normalize_angle(player_state.angle - FOV / 2 + i.to_double() * angle_step)
 
     // Cast the ray
     let ray_info = cast_ray(ray_angle)
