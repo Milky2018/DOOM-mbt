@@ -123,7 +123,7 @@ fn render_3d_system(_delta : Double) -> Unit {
 
 ///|
 fn render_map_system(_delta : Double) -> Unit {
-  let scale = 4.0
+  let scale = 6.0
   let offset_x = 10.0
   let offset_y = 10.0
   let map = get_map()
@@ -154,42 +154,47 @@ fn render_map_system(_delta : Double) -> Unit {
       }
     }
   }
+  let dot_size = 4.0
 
   // Draw dots on the map
   for dot in dots {
     if !dot.collected {
-      let dot_map_x = offset_x + dot.x / TILE_SIZE * scale
-      let dot_map_y = offset_y + dot.y / TILE_SIZE * scale
+      let dot_map_x = offset_x + dot.x / TILE_SIZE * scale - dot_size / 2.0
+      let dot_map_y = offset_y + dot.y / TILE_SIZE * scale - dot_size / 2.0
       @backend.draw_color_rect(
         x=dot_map_x - 1.0,
         y=dot_map_y - 1.0,
-        width=2.0,
-        height=2.0,
+        width=dot_size,
+        height=dot_size,
         color="#FFFF00", // Yellow dots
       )
     }
   }
 
   // Draw player position as red dot
-  let player_map_x = offset_x + player_state.x / TILE_SIZE * scale
-  let player_map_y = offset_y + player_state.y / TILE_SIZE * scale
+  let player_map_x = offset_x +
+    player_state.x / TILE_SIZE * scale -
+    dot_size / 2.0
+  let player_map_y = offset_y +
+    player_state.y / TILE_SIZE * scale -
+    dot_size / 2.0
   @backend.draw_color_rect(
     x=player_map_x - 2.0,
     y=player_map_y - 2.0,
-    width=4.0,
-    height=4.0,
+    width=dot_size,
+    height=dot_size,
     color="#00FF00", // Red dot for player
   )
 
   // Draw ghosts on minimap
   for ghost in ghosts {
-    let ghost_map_x = offset_x + ghost.x / TILE_SIZE * scale
-    let ghost_map_y = offset_y + ghost.y / TILE_SIZE * scale
+    let ghost_map_x = offset_x + ghost.x / TILE_SIZE * scale - dot_size / 2.0
+    let ghost_map_y = offset_y + ghost.y / TILE_SIZE * scale - dot_size / 2.0
     @backend.draw_color_rect(
       x=ghost_map_x - 1.5,
       y=ghost_map_y - 1.5,
-      width=3.0,
-      height=3.0,
+      width=dot_size,
+      height=dot_size,
       color=ghost.color, // Use ghost's color
     )
   }

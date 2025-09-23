@@ -28,7 +28,6 @@ fn is_wall(x : Double, y : Double) -> Bool {
 }
 
 ///|
-// Small level for easier gameplay
 // 0 = empty space, 1 = wall, 2 = ghost spawn point, 3 = player spawn point
 let level1 = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -43,7 +42,6 @@ let level1 = [
 ]
 
 ///|
-// Original large level
 let level2 = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],

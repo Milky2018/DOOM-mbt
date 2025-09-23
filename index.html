@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>3D Pacman</title>
+    <title>3D吃豆人</title>
     <script src="/target/js/release/build/pacman.js" defer></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Microsoft YaHei", sans-serif;
             background-color: #000;
             color: #fff;
             margin: 0;
@@ -63,31 +63,31 @@
 
 <body>
     <div class="game-container">
-        <h1>🎮 3D Pacman</h1>
+        <h1>🎮 3D吃豆人</h1>
 
         <canvas id="canvas" style="display: block; margin: 0 auto;" height="480" width="640"></canvas>
 
-        <p><em>Click on the game canvas to start playing and lock your mouse cursor!</em></p>
+        <p><em>点击游戏画面开始游戏并锁定鼠标光标！</em></p>
 
         <div class="instructions">
-            <h2>How to Play</h2>
+            <h2>游戏玩法</h2>
 
             <div class="controls">
                 <div class="control-section">
-                    <h3>🎯 Movement</h3>
-                    <p><span class="key">W</span> Move forward</p>
-                    <p><span class="key">S</span> Move backward</p>
-                    <p><span class="key">A</span> Strafe left</p>
-                    <p><span class="key">D</span> Strafe right</p>
-                    <p><span class="key">Mouse</span> Look around</p>
+                    <h3>🎯 移动控制</h3>
+                    <p><span class="key">W</span> 向前移动</p>
+                    <p><span class="key">S</span> 向后移动</p>
+                    <p><span class="key">A</span> 向左平移</p>
+                    <p><span class="key">D</span> 向右平移</p>
+                    <p><span class="key">鼠标</span> 环顾四周</p>
                 </div>
 
                 <div class="control-section">
-                    <h3>🎯 Goal</h3>
-                    <p class="goal">🟡 Collect all yellow dots</p>
-                    <p class="goal">🏆 Complete all levels</p>
-                    <p class="warning">🔴 Avoid red ghost balls!</p>
-                    <p>💀 Touching ghosts resets the level</p>
+                    <h3>🎯 游戏目标</h3>
+                    <p class="goal">🟡 收集所有黄色圆点</p>
+                    <p class="goal">🏆 完成所有关卡</p>
+                    <p class="warning">🔴 避开红色幽灵球！</p>
+                    <p>💀 碰到幽灵会重置关卡</p>
                 </div>
             </div>
         </div>
