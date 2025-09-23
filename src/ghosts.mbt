@@ -117,7 +117,7 @@ fn update_ghosts() -> Unit {
 fn check_ghost_collision() -> Bool {
   let player_x = player_state.x
   let player_y = player_state.y
-  let collision_distance = PLAYER_RADIUS + GHOST_RADIUS / 2.0
+  let collision_distance = PLAYER_RADIUS + GHOST_RADIUS
   for ghost in ghosts {
     let dx = ghost.x - player_x
     let dy = ghost.y - player_y

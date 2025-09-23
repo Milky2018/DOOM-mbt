@@ -15,6 +15,7 @@ fn main {
   .run()
 }
 
+///|
 fn game_startup(_delta : Double) -> Unit {
   @system.lock_mouse()
 }

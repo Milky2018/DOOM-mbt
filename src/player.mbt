@@ -7,11 +7,7 @@ struct PlayerState {
 
 ///|
 // Initialize player at spawn point (will be set by init_player)
-let player_state : PlayerState = {
-  x: 0.0,
-  y: 0.0,
-  angle: 0.0,
-}
+let player_state : PlayerState = { x: 0.0, y: 0.0, angle: 0.0 }
 
 ///|
 // Initialize player at spawn point from map
@@ -78,10 +74,10 @@ fn player_input_system(_delta : Double) -> Unit {
     // Reset the entire level (dots, ghosts, and player)
     reset_level()
   }
-
   if @system.is_mouse_locked() {
     let sensitivity = 0.002
-    let angle = player_state.angle + @inputs.mouse_movement.movement[X] * sensitivity
+    let angle = player_state.angle +
+      @inputs.mouse_movement.movement[X] * sensitivity
     player_state.angle = @smath.normalize_angle(angle)
   }
 }
