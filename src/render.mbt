@@ -1,9 +1,9 @@
 ///|
-fn render_3d_system(backend : &@system.Backend) -> Unit {
+fn render_3d_system(_delta : Double) -> Unit {
   let rays = cast_all_rays()
   let wall_height = 64.0
   let distance_scale = 1000.0
-  backend.draw_gradient_rect(
+  @backend.draw_gradient_rect(
     x=0,
     y=0,
     width=CANVAS_WIDTH,
@@ -11,7 +11,7 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
     color_start="#2A2A2A",
     color_end="#1E1E1E",
   )
-  backend.draw_gradient_rect(
+  @backend.draw_gradient_rect(
     x=0,
     y=CANVAS_HEIGHT / 2,
     width=CANVAS_WIDTH,
@@ -64,7 +64,7 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
       let b = (try! (@strconv.parse_int(texture_color[5:7].to_string(), base=16).to_double() *
       final_shading)).to_int()
       let shaded_color = "rgb(\{r}, \{g}, \{b})"
-      backend.draw_color_rect(
+      @backend.draw_color_rect(
         x=strip_x,
         y=segment_y,
         width=strip_width + 1,
@@ -83,9 +83,9 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
       let x = distance * @math.tan(angle_diff)
       let h = (DOT_RADIUS * DOT_RADIUS - x * x).sqrt()
       let dot_height = h * 1.3 * distance_scale / distance
-      let y_offset = 40.0 * distance_scale / distance
+      let y_offset = 24.0 * distance_scale / distance
       let dot_top = (CANVAS_HEIGHT - dot_height + y_offset) / 2
-      backend.draw_color_rect(
+      @backend.draw_color_rect(
         x=center_x,
         y=dot_top,
         width=strip_width + 1,
@@ -97,7 +97,7 @@ fn render_3d_system(backend : &@system.Backend) -> Unit {
 }
 
 ///|
-fn render_map_system(backend : &@system.Backend) -> Unit {
+fn render_map_system(_delta : Double) -> Unit {
   let scale = 4.0
   let offset_x = 10.0
   let offset_y = 10.0
@@ -108,7 +108,7 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
       let cell_x = offset_x + x.to_double() * scale
       let cell_y = offset_y + y.to_double() * scale
       if map[y][x] == 1 {
-        backend.draw_color_rect(
+        @backend.draw_color_rect(
           x=cell_x,
           y=cell_y,
           width=scale,
@@ -116,7 +116,7 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
           color="#8B4513",
         )
       } else {
-        backend.draw_color_rect(
+        @backend.draw_color_rect(
           x=cell_x,
           y=cell_y,
           width=scale,
@@ -132,7 +132,7 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
     if !dot.collected {
       let dot_map_x = offset_x + dot.x / TILE_SIZE * scale
       let dot_map_y = offset_y + dot.y / TILE_SIZE * scale
-      backend.draw_color_rect(
+      @backend.draw_color_rect(
         x=dot_map_x - 1.0,
         y=dot_map_y - 1.0,
         width=2.0,
@@ -141,4 +141,15 @@ fn render_map_system(backend : &@system.Backend) -> Unit {
       )
     }
   }
+
+  // Draw player position as red dot
+  let player_map_x = offset_x + player_state.x / TILE_SIZE * scale
+  let player_map_y = offset_y + player_state.y / TILE_SIZE * scale
+  @backend.draw_color_rect(
+    x=player_map_x - 2.0,
+    y=player_map_y - 2.0,
+    width=4.0,
+    height=4.0,
+    color="#FF0000", // Red dot for player
+  )
 }

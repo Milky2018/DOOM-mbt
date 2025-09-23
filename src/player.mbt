@@ -19,22 +19,22 @@ const SPEED = 2.0
 const PLAYER_RADIUS = 16.0
 
 ///|
-fn player_input_system(_backend : &@system.Backend) -> Unit {
+fn player_input_system(_delta : Double) -> Unit {
   let mut move_x = 0.0
   let mut move_y = 0.0
-  if @system.is_pressed(KeyW) {
+  if @inputs.is_pressed(KeyW) {
     move_x += @math.cos(player_state.angle) * SPEED
     move_y += @math.sin(player_state.angle) * SPEED
   }
-  if @system.is_pressed(KeyS) {
+  if @inputs.is_pressed(KeyS) {
     move_x -= @math.cos(player_state.angle) * SPEED
     move_y -= @math.sin(player_state.angle) * SPEED
   }
-  if @system.is_pressed(KeyA) {
+  if @inputs.is_pressed(KeyA) {
     move_x += @math.cos(player_state.angle - @math.PI / 2) * SPEED
     move_y += @math.sin(player_state.angle - @math.PI / 2) * SPEED
   }
-  if @system.is_pressed(KeyD) {
+  if @inputs.is_pressed(KeyD) {
     move_x += @math.cos(player_state.angle + @math.PI / 2) * SPEED
     move_y += @math.sin(player_state.angle + @math.PI / 2) * SPEED
   }
@@ -52,7 +52,7 @@ fn player_input_system(_backend : &@system.Backend) -> Unit {
 
   if @system.is_mouse_locked() {
     let sensitivity = 0.002
-    let angle = player_state.angle + @system.mouse_movement.movement[X] * sensitivity
+    let angle = player_state.angle + @inputs.mouse_movement.movement[X] * sensitivity
     player_state.angle = @smath.normalize_angle(angle)
   }
 }

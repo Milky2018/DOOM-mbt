@@ -3,7 +3,12 @@
   "import": [
     "Milky2018/selene/system",
     "Milky2018/selene/plugins",
-    { "path": "Milky2018/selene/math", "alias": "smath" },
-    { "path": "Milky2018/selene-canvas", "alias": "canvas" }
+    "Milky2018/selene/audio",
+    "Milky2018/selene/backend",
+    "Milky2018/selene/inputs",
+    { "path": "Milky2018/selene/math", "alias": "smath" }
+  ],
+  "overrides": [
+    "Milky2018/selene-canvas"
   ]
 }
