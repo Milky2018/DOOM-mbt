@@ -1,5 +1,5 @@
 {
-  "name": "Milky2018/doom",
+  "name": "Milky2018/pacman",
   "version": "0.1.0",
   "deps": {
     "Milky2018/selene": "0.16.0",

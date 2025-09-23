@@ -193,4 +193,32 @@ fn render_map_system(_delta : Double) -> Unit {
       color=ghost.color, // Use ghost's color
     )
   }
+
+  // Draw level display in top right corner
+  let level_text = "Level: \{current_level.val + 1}"
+  @backend.draw_text(
+    text=level_text,
+    x=CANVAS_WIDTH - 140.0,
+    y=40.0,
+    font="36px Arial",
+    color="#FFFFFF",
+  )
+
+  // Draw congratulations message when all levels completed
+  if completed_all_levels.val {
+    @backend.draw_text(
+      text="CONGRATULATIONS!",
+      x=CANVAS_WIDTH / 2.0 - 170.0,
+      y=30.0,
+      font="32px Arial",
+      color="#00FF00", // Gold color
+    )
+    @backend.draw_text(
+      text="You completed all levels!",
+      x=CANVAS_WIDTH / 2.0 - 120.0,
+      y=70.0,
+      font="20px Arial",
+      color="#00FF00", // Green color
+    )
+  }
 }

@@ -71,6 +71,7 @@ let level2 = [
 ///|
 // Level progression system
 let current_level : Ref[Int] = Ref::new(0)
+let completed_all_levels : Ref[Bool] = Ref::new(false)
 
 ///|
 let levels : Array[Level] = [level1, level2]
@@ -82,6 +83,7 @@ typealias Array[Array[Int]] as Level
 fn next_level() -> Unit {
   current_level.val = current_level.val + 1
   if current_level.val >= levels.length() {
+    completed_all_levels.val = true // Mark completion before wrapping
     current_level.val = 0 // Back to level 1 after completing all levels
   }
 }
