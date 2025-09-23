@@ -74,7 +74,7 @@ fn player_input_system(_delta : Double) -> Unit {
 
   // Check for ghost collision - reset entire level if collision detected
   if check_ghost_collision() {
-    @audio.play_audio("assets/game_over.wav")
+    @audio.play_audio("assets/hurt.wav")
     // Reset the entire level (dots, ghosts, and player)
     reset_level()
   }
