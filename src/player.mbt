@@ -13,10 +13,10 @@ let player_state : PlayerState = { x: 0.0, y: 0.0, angle: 0.0 }
 // Initialize player at spawn point from map
 fn init_player() -> Unit {
   let map = get_map()
-  // Find player spawn point (value 3) in the map
+  // Find player spawn point (value 2) in the map
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {
-      if map[y][x] == 3 { // Player spawn point
+      if map[y][x] == 2 { // Player spawn point
         player_state.x = (x.to_double() + 0.5) * TILE_SIZE
         player_state.y = (y.to_double() + 0.5) * TILE_SIZE
         player_state.angle = 0.0
@@ -34,7 +34,7 @@ fn init_player() -> Unit {
 const SPEED = 2.0
 
 ///|
-const PLAYER_RADIUS = 16.0
+const PLAYER_RADIUS = 20.0
 
 ///|
 fn player_input_system(_delta : Double) -> Unit {

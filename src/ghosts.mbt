@@ -10,10 +10,18 @@ enum Direction {
 }
 
 ///|
+enum GhostType {
+  Fast // Red ghost - faster than normal
+  Normal // Orange ghost - normal speed
+  Slow // Blue ghost - slower but more unpredictable
+}
+
+///|
 struct Ghost {
   mut x : Double
   mut y : Double
   mut direction : Direction
+  ghost_type : GhostType
   color : String
 }
 
@@ -22,10 +30,32 @@ struct Ghost {
 let ghosts : Array[Ghost] = []
 
 ///|
-const GHOST_SPEED = 1.5
+const BASE_GHOST_SPEED = 1.6
 
 ///|
 const GHOST_RADIUS = 20.0
+
+///|
+// Get ghost speed based on type and level
+fn get_ghost_speed(ghost_type : GhostType) -> Double {
+  let base_speed = BASE_GHOST_SPEED + current_level.val.to_double() * 0.3
+  match ghost_type {
+    Fast => base_speed * 1.5 // 50% faster
+    Normal => base_speed // Normal speed
+    Slow => base_speed * 0.7 // 30% slower
+  }
+}
+
+///|
+// Get ghost type and color based on map value
+fn get_ghost_type_from_map(map_value : Int) -> (GhostType, String) {
+  match map_value {
+    3 => (Fast, "#FF0000") // Red fast ghost
+    4 => (Normal, "#FFA500") // Orange normal ghost
+    5 => (Slow, "#0000FF") // Blue slow ghost
+    _ => (Normal, "#FFA500") // Default to normal
+  }
+}
 
 ///|
 // Initialize ghosts in the maze based on map data
@@ -33,17 +63,19 @@ fn init_ghosts() -> Unit {
   ghosts.clear()
   let map = get_map()
 
-  // Find ghost spawn points (value 2) in the map
+  // Find ghost spawn points (values 3, 4, 5) in the map
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {
-      if map[y][x] == 2 { // Ghost spawn point
+      if map[y][x] == 3 || map[y][x] == 4 || map[y][x] == 5 { // Ghost spawn points
         let spawn_x = (x.to_double() + 0.5) * TILE_SIZE
         let spawn_y = (y.to_double() + 0.5) * TILE_SIZE
+        let (ghost_type, color) = get_ghost_type_from_map(map[y][x])
         ghosts.push({
           x: spawn_x,
           y: spawn_y,
           direction: get_random_direction(),
-          color: "#FF0000",
+          ghost_type,
+          color,
         })
       }
     }
@@ -51,11 +83,13 @@ fn init_ghosts() -> Unit {
 }
 
 ///|
+let rand : @random.Rand = @random.Rand::new()
+
+///|
 // Get random direction using a simple pseudo-random generator
 fn get_random_direction() -> Direction {
   // Use player position for randomness
-  let seed = (player_state.x + player_state.y).to_int()
-  let random = (seed * 1103515245 + 12345) % 4
+  let random = rand.int() % 4
   match random {
     0 => Up
     1 => Down
@@ -89,14 +123,15 @@ fn ghost_can_move_to(x : Double, y : Double) -> Bool {
 // Update ghost AI and movement
 fn update_ghosts() -> Unit {
   for ghost in ghosts {
-    // Calculate movement based on direction
+    // Calculate movement based on direction and ghost type
+    let ghost_speed = get_ghost_speed(ghost.ghost_type)
     let mut dx = 0.0
     let mut dy = 0.0
     match ghost.direction {
-      Up => dy = -GHOST_SPEED
-      Down => dy = GHOST_SPEED
-      Left => dx = -GHOST_SPEED
-      Right => dx = GHOST_SPEED
+      Up => dy = -ghost_speed
+      Down => dy = ghost_speed
+      Left => dx = -ghost_speed
+      Right => dx = ghost_speed
     }
     let new_x = ghost.x + dx
     let new_y = ghost.y + dy
