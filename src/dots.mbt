@@ -19,7 +19,7 @@ fn init_dots() -> Unit {
   let map = get_map()
   for y in 0..<map.length() {
     for x in 0..<map[y].length() {
-      if map[y][x] == 0 { // Only place dots in empty spaces (not walls, ghost spawns, or player spawn)
+      if map[y][x] != 1 && map[y][x] != 2 {
         // Place dot in center of tile
         let dot_x = (x.to_double() + 0.5) * TILE_SIZE
         let dot_y = (y.to_double() + 0.5) * TILE_SIZE
@@ -52,6 +52,29 @@ fn collect_dot(index : Int) -> Unit {
     dots[index] = { ..dots[index], collected: true }
     @audio.play_audio("assets/coin.wav")
   }
+}
+
+///|
+// Get total number of dots in current level
+fn get_total_dots() -> Int {
+  dots.length()
+}
+
+///|
+// Get number of collected dots
+fn get_collected_dots() -> Int {
+  dots.filter(fn(dot) { dot.collected }).length()
+}
+
+///|
+// Check if half or more dots have been collected (for minimap visibility)
+fn half_dots_collected() -> Bool {
+  let total = get_total_dots()
+  let collected = get_collected_dots()
+  if total == 0 {
+    return false
+  }
+  collected >= total / 2
 }
 
 ///|

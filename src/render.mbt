@@ -187,6 +187,9 @@ fn render_map_system(_delta : Double) -> Unit {
   )
 
   // Draw ghosts on minimap
+  if !half_dots_collected() {
+    return
+  }
   for ghost in ghosts {
     let ghost_map_x = offset_x + ghost.x / TILE_SIZE * scale - dot_size / 2.0
     let ghost_map_y = offset_y + ghost.y / TILE_SIZE * scale - dot_size / 2.0
@@ -198,7 +201,10 @@ fn render_map_system(_delta : Double) -> Unit {
       color=ghost.color, // Use ghost's color
     )
   }
+}
 
+///|
+fn render_ui_system(_delta : Double) -> Unit {
   // Draw level display in top right corner
   let level_text = "Level: \{current_level.val + 1}"
   @backend.draw_text(
